@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Transaction: <%= Id %></title>
+</head>
+<body>
+    <h2>Transaction for <%= Transaction.txid %></h2>
+    Sending Address <%= Transaction.sendingaddress %><br />
+    Confirmations <%= Transaction.confirmations %><br />
+    Transaction Type: <%= Transaction.type %><br />
+    PropertyId <a href="/getProperty/<%= Transaction.propertyid %>"><%= Property.name %></a><br />
+    Amount <%= Transaction.amount %><br />
+    Valid <%= Transaction.valid %><br />
+</body>
+</html>

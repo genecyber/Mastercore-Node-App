@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    Protocol Balances for asset: <%= Id %> at address: <%= Address %>
+    <hr/>
+    <b><ul><h1><%= Balance %> <%= Details.name %></h1></ul></b> <br />
+    <h2><%= Details.name %> </h2>
+    Category <%= Details.category %> > Sub Category <%= Details.subcategory %> <br />
+    <h3>Description</h3> <%= Details.data %> <br/>
+    <a href="<%= Details.url %>"><%= Details.url %></a><br />
+    Is Coin Divisible? <%= Details.divisible %><br />
+    Issuance Address <a href="/getProtocolBalance/<%= Details.issuer %>/<%= Id %>"><%= Details.issuer %></a><br />
+    Creation Transaction <a href="/getTransaction/ <%= Details.creationtxid %>"> <%= Details.creationtxid %></a><br />
+    Total Issued Tokens <%= Details.totaltokens %><br />
+    <hr/>
+    <a href="/getProtocolBalance/<%= Details.issuer %>/<%= parseInt(Id) -1 %>"> Previous</a> | <a href="/getProtocolBalance/<%= Details.issuer %>/<%= parseInt(Id) +1 %>">Next</a>
+</body>
+</html>

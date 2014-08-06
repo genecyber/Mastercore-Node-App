@@ -1,0 +1,10 @@
+{
+  "name": "Mastercore Node App",
+  "version": "0.0.0",
+  "description": "NodeApp",
+  "main": "server.js",
+  "author": {
+    "name": "ShannonCode",
+    "email": ""
+  }
+}
