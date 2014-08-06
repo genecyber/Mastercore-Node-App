@@ -22,10 +22,10 @@ var router = express.Router(); 				// get an instance of the express Router
 // BITCOIN RPC CLIENT
 // =============================================================================
 var client = new bitcoin.Client({
-    host: 'xxx.xxx.xxx.xxx',
+    host: 'localhost',
     port: 8332,
-    user: 'bitcoinrpc',
-    pass: 'password'
+    user: 'user',
+    pass: 'pass'
 });
 
 function getDifficulty(callback) {
@@ -75,12 +75,20 @@ function getProtocolPropertyList(callback) {
 
 function getTransactions(callback,req,count) {
     var address = req.params.address;
-    client.cmd('listtransactions_MP', address, count, function (err, props, resHeaders) {
-        if (err) {
-            callback(err.code, null); //these should end up handled
-        } else {
-            callback(null, props);
-        }
+
+    client.cmd('validateaddress', address, function(err, data) {
+
+      if ( data.ismine == true ) {
+        client.cmd('listtransactions_MP', address, count, function (err, props, resHeaders) {
+            if (err) {
+                callback(err.code, null); //these should end up handled
+            } else {
+                callback(null, props);
+            }
+        });
+      } else
+          callback(null, {} ); //address not in wallet
+
     });
 }
 
