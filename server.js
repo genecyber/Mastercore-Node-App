@@ -22,10 +22,10 @@ var router = express.Router(); 				// get an instance of the express Router
 // BITCOIN RPC CLIENT
 // =============================================================================
 var client = new bitcoin.Client({
-    host: '162.242.208.46',
-    port: 9332,
+    host: 'xxx.xxx.xxx.xxx',
+    port: 8332,
     user: 'bitcoinrpc',
-    pass: '7pL5HeF7zVN1BS1BK8bm9CC7itatAkbo6HryNbt7Z6St'
+    pass: 'password'
 });
 
 function getDifficulty(callback) {
