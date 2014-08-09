@@ -8,6 +8,7 @@ var express = require('express'); 		// call express
 var app = express(); 				// define our app using express
 var bitcoin = require('bitcoin'); //This is the bitcoin RPC library
 var async = require('async'); //Yea this helps a bit
+var split = require('split')
 
 //ejs template setup
 app.engine('html', require('ejs').renderFile);
@@ -22,11 +23,21 @@ var router = express.Router(); 				// get an instance of the express Router
 // BITCOIN RPC CLIENT
 // =============================================================================
 var client = new bitcoin.Client({
-    host: 'localhost',
-    port: 8332,
-    user: 'user',
-    pass: 'pass'
+    host: '162.242.208.46',
+    port: 9332,
+    user: 'bitcoinrpc',
+    pass: '7pL5HeF7zVN1BS1BK8bm9CC7itatAkbo6HryNbt7Z6St'
 });
+
+//read recipe
+var fs = require("fs");
+var recipeArr = [];
+var recipeArr = fs.readFileSync('recipes.txt').toString().split("===============");
+for(i in recipeArr) {
+    console.log(recipeArr[i]);
+}
+
+
 
 function getDifficulty(callback) {
      client.getDifficulty( function (err, difficulty) {
@@ -163,6 +174,21 @@ router.get('/getProperty/:id', function (req, res) {
         res.render("property", { Property: results[0][0], Id: req.params.id });
     });
 });
+
+router.get('/recipe/:id',function(req,res) {
+	var pieces = recipeArr[req.params.id].split("INGREDIENTS:");
+	var pieces2 = pieces[1].split("METHOD:");
+	var name = pieces[0];
+	var ingredients = pieces[1];
+	ingredients = ingredients.replace(/\n\r?/g, '<br>');
+	var method = pieces2[0];
+	res.render("recipe",{id: parseInt(req.params.id), Total: recipeArr.length, Name: name, Ingredients: ingredients, Method: method.get});
+});
+
+function nl2br (str, is_xhtml) {
+  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>';     
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
 
 // Test route to a bitcoin specific call
 router.get('/difficulty', function (req, res) {
