@@ -1,3 +1,6 @@
-config.js
-transactions.sqlite3
+.ntvs_analysis.dat
+#config.js
+#transactions.sqlite3
 NodeApp.v12.suo
+/node_modules/*
+/obj/*
