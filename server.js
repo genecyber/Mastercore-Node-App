@@ -90,6 +90,16 @@ function getProtocolPropertyList(callback) {
     });
 }
 
+function getAccountAddress(req,tx,callback) {
+    client.cmd('getaccountaddress',req, function (err, account, resHeaders) {
+        if (err) {
+            callback(err.code, null); //these should end up handled
+        } else {
+            callback(null, account,tx);
+        }
+    });
+}
+
 function getTransactions(callback,req,count) {
     var address = req.params.address;
 
@@ -198,9 +208,11 @@ router.get('/notify/', function (req, res) {
 async.waterfall([
     function (callback) {
         getTransactionsFromDb(callback);
+    }, function (tx, callback) {
+        getAccountAddress("0", tx, callback);
     }],
-    function (err, txs) {
-        res.render("notify", { Notifications : txs });            
+    function (err, address, txs) {
+        res.render("notify", { Notifications : txs, Address: address });            
     });
 });
 
