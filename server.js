@@ -8,7 +8,7 @@ var express = require('express'); 		// call express
 var app = express(); 				// define our app using express
 var bitcoin = require('bitcoin'); //This is the bitcoin RPC library
 var async = require('async'); //Yea this helps a bit
-var config = require('./config') //Moved configurable items out of 
+var config = require('./config'); //Moved configurable items out of 
 
 //DATABASE
 // ===============
@@ -22,7 +22,7 @@ function createDb() {
 }
 
 function createTable() {
-    console.log("createTable txs")
+    console.log("createTable txs");
     db.run("CREATE TABLE IF NOT EXISTS tx (txid TEXT)");
 }
 
@@ -188,15 +188,36 @@ router.get('/notify/:tx',function(req,res) {
 	var stmt = db.prepare("INSERT INTO tx VALUES (?)");
 	stmt.run(req.params.tx);
 	stmt.finalize(function() {
-		console.log("closeDb");
-		db.close();
+		console.log("close Db");
+		//db.close();
 	});
 	res.json({tx: req.params.tx});
 });
 
-router.get('/notify/',function(req,res) {
-	res.render("notify",{});
+router.get('/notify/', function (req, res) {
+async.waterfall([
+    function (callback) {
+        getTransactionsFromDb(callback);
+    }],
+    function (err, txs) {
+        res.render("notify", { Notifications : txs });            
+    });
 });
+
+function getTransactionsFromDb(callback) {
+   
+    var transactions = [];
+    db.each("SELECT txid AS id FROM tx", function (err, row) {
+        if (err) {
+            callback(err.code, null); //these should end up handled
+        } else {
+            transactions.push(row);
+        }
+    }, function(foo) {
+        callback(null, transactions);
+    });
+    
+}
 
 
 // Test route to a bitcoin specific call
@@ -210,7 +231,9 @@ router.get('/difficulty', function (req, res) {
 // =============================================================================
 app.listen(port);
 console.log('Magic happens on port ' + port);
-
+//Database
+//===========================
+createDb();
 //HELPERS
 function isProduction(element) {
     return element.propertyid <= 1000;

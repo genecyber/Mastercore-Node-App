@@ -35,6 +35,7 @@
     <Content Include="README.md" />
     <Content Include="views\balance.html" />
     <Content Include="views\index.html" />
+    <Content Include="views\notify.html" />
     <Content Include="views\properties.html" />
     <Content Include="views\property.html" />
     <Content Include="views\transaction.html" />
